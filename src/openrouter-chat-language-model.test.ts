@@ -5,7 +5,7 @@ import {
   convertReadableStreamToArray,
 } from "@ai-sdk/provider-utils/test";
 import { mapOpenRouterChatLogProbsOutput } from "./map-openrouter-chat-logprobs";
-import { createOpenRouter } from "./openrouter-provider";
+import { createVolcEngine } from "./openrouter-provider";
 
 const TEST_PROMPT: LanguageModelV1Prompt = [
   { role: "user", content: [{ type: "text", text: "Hello" }] },
@@ -106,7 +106,7 @@ const TEST_LOGPROBS = {
   ],
 };
 
-const provider = createOpenRouter({
+const provider = createVolcEngine({
   apiKey: "test-api-key",
   compatibility: "strict",
 });
@@ -386,7 +386,7 @@ describe("doGenerate", () => {
   it("should pass headers", async () => {
     prepareJsonResponse({ content: "" });
 
-    const provider = createOpenRouter({
+    const provider = createVolcEngine({
       apiKey: "test-api-key",
       headers: {
         "Custom-Provider-Header": "provider-header-value",
@@ -786,7 +786,7 @@ describe("doStream", () => {
   it("should pass headers", async () => {
     prepareStreamResponse({ content: [] });
 
-    const provider = createOpenRouter({
+    const provider = createVolcEngine({
       apiKey: "test-api-key",
       headers: {
         "Custom-Provider-Header": "provider-header-value",
@@ -815,7 +815,7 @@ describe("doStream", () => {
   it("should pass extra body", async () => {
     prepareStreamResponse({ content: [] });
 
-    const provider = createOpenRouter({
+    const provider = createVolcEngine({
       apiKey: "test-api-key",
       extraBody: {
         custom_field: "custom_value",

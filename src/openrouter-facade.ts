@@ -1,29 +1,29 @@
 import { loadApiKey, withoutTrailingSlash } from "@ai-sdk/provider-utils";
-import { OpenRouterChatLanguageModel } from "./openrouter-chat-language-model";
+import { VolcEngineChatLanguageModel } from "./openrouter-chat-language-model";
 import type {
-  OpenRouterChatModelId,
-  OpenRouterChatSettings,
+  VolcEngineChatModelId,
+  VolcEngineChatSettings,
 } from "./openrouter-chat-settings";
 import { OpenRouterCompletionLanguageModel } from "./openrouter-completion-language-model";
 import type {
   OpenRouterCompletionModelId,
   OpenRouterCompletionSettings,
 } from "./openrouter-completion-settings";
-import type { OpenRouterProviderSettings } from "./openrouter-provider";
+import type { VolcEngineProviderSettings } from "./openrouter-provider";
 
 /**
-@deprecated Use `createOpenRouter` instead.
+@deprecated Use `createVolcEngine` instead.
  */
-export class OpenRouter {
+export class VolcEngine {
   /**
 Use a different URL prefix for API calls, e.g. to use proxy servers.
-The default prefix is `https://openrouter.ai/api/v1`.
+The default prefix is `https://ark.cn-beijing.volces.com/api/v3`.
    */
   readonly baseURL: string;
 
   /**
 API key that is being send using the `Authorization` header.
-It defaults to the `OPENROUTER_API_KEY` environment variable.
+It defaults to the `VOLCENGINE_API_KEY` environment variable.
  */
   readonly apiKey?: string;
 
@@ -35,10 +35,10 @@ Custom headers to include in the requests.
   /**
    * Creates a new OpenRouter provider instance.
    */
-  constructor(options: OpenRouterProviderSettings = {}) {
+  constructor(options: VolcEngineProviderSettings = {}) {
     this.baseURL =
       withoutTrailingSlash(options.baseURL ?? options.baseUrl) ??
-      "https://openrouter.ai/api/v1";
+      "https://ark.cn-beijing.volces.com/api/v3";
     this.apiKey = options.apiKey;
     this.headers = options.headers;
   }
@@ -49,16 +49,16 @@ Custom headers to include in the requests.
       headers: () => ({
         Authorization: `Bearer ${loadApiKey({
           apiKey: this.apiKey,
-          environmentVariableName: "OPENROUTER_API_KEY",
-          description: "OpenRouter",
+          environmentVariableName: "VOLCENGINE_API_KEY",
+          description: "VolcEngine",
         })}`,
         ...this.headers,
       }),
     };
   }
 
-  chat(modelId: OpenRouterChatModelId, settings: OpenRouterChatSettings = {}) {
-    return new OpenRouterChatLanguageModel(modelId, settings, {
+  chat(modelId: VolcEngineChatModelId, settings: VolcEngineChatSettings = {}) {
+    return new VolcEngineChatLanguageModel(modelId, settings, {
       provider: "openrouter.chat",
       ...this.baseConfig,
       compatibility: "strict",

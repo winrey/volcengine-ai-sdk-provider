@@ -1,8 +1,8 @@
 import { loadApiKey, withoutTrailingSlash } from "@ai-sdk/provider-utils";
-import { OpenRouterChatLanguageModel } from "./openrouter-chat-language-model";
+import { VolcEngineChatLanguageModel } from "./openrouter-chat-language-model";
 import type {
-  OpenRouterChatModelId,
-  OpenRouterChatSettings,
+  VolcEngineChatModelId,
+  VolcEngineChatSettings,
 } from "./openrouter-chat-settings";
 import { OpenRouterCompletionLanguageModel } from "./openrouter-completion-language-model";
 import type {
@@ -10,32 +10,32 @@ import type {
   OpenRouterCompletionSettings,
 } from "./openrouter-completion-settings";
 
-export interface OpenRouterProvider {
+export interface VolcEngineProvider {
   (
     modelId: "openai/gpt-3.5-turbo-instruct",
     settings?: OpenRouterCompletionSettings
   ): OpenRouterCompletionLanguageModel;
   (
-    modelId: OpenRouterChatModelId,
-    settings?: OpenRouterChatSettings
-  ): OpenRouterChatLanguageModel;
+    modelId: VolcEngineChatModelId,
+    settings?: VolcEngineChatSettings
+  ): VolcEngineChatLanguageModel;
 
   languageModel(
     modelId: "openai/gpt-3.5-turbo-instruct",
     settings?: OpenRouterCompletionSettings
   ): OpenRouterCompletionLanguageModel;
   languageModel(
-    modelId: OpenRouterChatModelId,
-    settings?: OpenRouterChatSettings
-  ): OpenRouterChatLanguageModel;
+    modelId: VolcEngineChatModelId,
+    settings?: VolcEngineChatSettings
+  ): VolcEngineChatLanguageModel;
 
   /**
 Creates an OpenRouter chat model for text generation.
    */
   chat(
-    modelId: OpenRouterChatModelId,
-    settings?: OpenRouterChatSettings
-  ): OpenRouterChatLanguageModel;
+    modelId: VolcEngineChatModelId,
+    settings?: VolcEngineChatSettings
+  ): VolcEngineChatLanguageModel;
 
   /**
 Creates an OpenRouter completion model for text generation.
@@ -46,7 +46,7 @@ Creates an OpenRouter completion model for text generation.
   ): OpenRouterCompletionLanguageModel;
 }
 
-export interface OpenRouterProviderSettings {
+export interface VolcEngineProviderSettings {
   /**
 Base URL for the OpenRouter API calls.
      */
@@ -89,12 +89,12 @@ A JSON object to send as the request body to access OpenRouter features & upstre
 /**
 Create an OpenRouter provider instance.
  */
-export function createOpenRouter(
-  options: OpenRouterProviderSettings = {}
-): OpenRouterProvider {
+export function createVolcEngine(
+  options: VolcEngineProviderSettings = {}
+): VolcEngineProvider {
   const baseURL =
     withoutTrailingSlash(options.baseURL ?? options.baseUrl) ??
-    "https://openrouter.ai/api/v1";
+    "https://ark.cn-beijing.volces.com/api/v3";
 
   // we default to compatible, because strict breaks providers like Groq:
   const compatibility = options.compatibility ?? "compatible";
@@ -102,17 +102,17 @@ export function createOpenRouter(
   const getHeaders = () => ({
     Authorization: `Bearer ${loadApiKey({
       apiKey: options.apiKey,
-      environmentVariableName: "OPENROUTER_API_KEY",
-      description: "OpenRouter",
+      environmentVariableName: "VOLCENGINE_API_KEY",
+      description: "VolcEngine",
     })}`,
     ...options.headers,
   });
 
   const createChatModel = (
-    modelId: OpenRouterChatModelId,
-    settings: OpenRouterChatSettings = {}
+    modelId: VolcEngineChatModelId,
+    settings: VolcEngineChatSettings = {}
   ) =>
-    new OpenRouterChatLanguageModel(modelId, settings, {
+    new VolcEngineChatLanguageModel(modelId, settings, {
       provider: "openrouter.chat",
       url: ({ path }) => `${baseURL}${path}`,
       headers: getHeaders,
@@ -135,8 +135,8 @@ export function createOpenRouter(
     });
 
   const createLanguageModel = (
-    modelId: OpenRouterChatModelId | OpenRouterCompletionModelId,
-    settings?: OpenRouterChatSettings | OpenRouterCompletionSettings
+    modelId: VolcEngineChatModelId | OpenRouterCompletionModelId,
+    settings?: VolcEngineChatSettings | OpenRouterCompletionSettings
   ) => {
     if (new.target) {
       throw new Error(
@@ -151,12 +151,12 @@ export function createOpenRouter(
       );
     }
 
-    return createChatModel(modelId, settings as OpenRouterChatSettings);
+    return createChatModel(modelId, settings as VolcEngineChatSettings);
   };
 
   const provider = function (
-    modelId: OpenRouterChatModelId | OpenRouterCompletionModelId,
-    settings?: OpenRouterChatSettings | OpenRouterCompletionSettings
+    modelId: VolcEngineChatModelId | OpenRouterCompletionModelId,
+    settings?: VolcEngineChatSettings | OpenRouterCompletionSettings
   ) {
     return createLanguageModel(modelId, settings);
   };
@@ -165,12 +165,12 @@ export function createOpenRouter(
   provider.chat = createChatModel;
   provider.completion = createCompletionModel;
 
-  return provider as OpenRouterProvider;
+  return provider as VolcEngineProvider;
 }
 
 /**
-Default OpenRouter provider instance. It uses 'strict' compatibility mode.
+Default VolcEngine provider instance. It uses 'strict' compatibility mode.
  */
-export const openrouter = createOpenRouter({
-  compatibility: "strict", // strict for OpenRouter API
+export const volcEngine = createVolcEngine({
+  // compatibility: "strict", // strict for OpenRouter API
 });

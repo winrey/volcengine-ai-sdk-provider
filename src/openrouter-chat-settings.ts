@@ -1,7 +1,7 @@
 // https://openrouter.ai/api/v1/models
-export type OpenRouterChatModelId = string;
+export type VolcEngineChatModelId = string;
 
-export interface OpenRouterChatSettings {
+export interface VolcEngineChatSettings {
   /**
 Modify the likelihood of specified tokens appearing in the completion.
 

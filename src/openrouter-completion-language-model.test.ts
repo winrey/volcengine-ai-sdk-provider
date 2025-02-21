@@ -4,7 +4,7 @@ import {
   StreamingTestServer,
   convertReadableStreamToArray,
 } from "@ai-sdk/provider-utils/test";
-import { createOpenRouter } from "./openrouter-provider";
+import { createVolcEngine } from "./openrouter-provider";
 import { mapOpenRouterCompletionLogProbs } from "./map-openrouter-completion-logprobs";
 
 const TEST_PROMPT: LanguageModelV1Prompt = [
@@ -38,7 +38,7 @@ const TEST_LOGPROBS = {
   ] as Record<string, number>[],
 };
 
-const provider = createOpenRouter({
+const provider = createVolcEngine({
   apiKey: "test-api-key",
   compatibility: "strict",
 });
@@ -123,7 +123,7 @@ describe("doGenerate", () => {
   it("should extract logprobs", async () => {
     prepareJsonResponse({ logprobs: TEST_LOGPROBS });
 
-    const provider = createOpenRouter({ apiKey: "test-api-key" });
+    const provider = createVolcEngine({ apiKey: "test-api-key" });
 
     const response = await provider
       .completion("openai/gpt-3.5-turbo", { logprobs: 1 })
@@ -232,7 +232,7 @@ describe("doGenerate", () => {
   it("should pass headers", async () => {
     prepareJsonResponse({ content: "" });
 
-    const provider = createOpenRouter({
+    const provider = createVolcEngine({
       apiKey: "test-api-key",
       headers: {
         "Custom-Provider-Header": "provider-header-value",
@@ -447,7 +447,7 @@ describe("doStream", () => {
   it("should pass headers", async () => {
     prepareStreamResponse({ content: [] });
 
-    const provider = createOpenRouter({
+    const provider = createVolcEngine({
       apiKey: "test-api-key",
       headers: {
         "Custom-Provider-Header": "provider-header-value",
@@ -476,7 +476,7 @@ describe("doStream", () => {
   it("should pass extra body", async () => {
     prepareStreamResponse({ content: [] });
 
-    const provider = createOpenRouter({
+    const provider = createVolcEngine({
       apiKey: "test-api-key",
       extraBody: {
         custom_field: "custom_value",

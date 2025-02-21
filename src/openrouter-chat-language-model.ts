@@ -22,8 +22,8 @@ import { convertToOpenRouterChatMessages } from "./convert-to-openrouter-chat-me
 import { mapOpenRouterChatLogProbsOutput } from "./map-openrouter-chat-logprobs";
 import { mapOpenRouterFinishReason } from "./map-openrouter-finish-reason";
 import type {
-  OpenRouterChatModelId,
-  OpenRouterChatSettings,
+  VolcEngineChatModelId,
+  VolcEngineChatSettings,
 } from "./openrouter-chat-settings";
 import {
   openAIErrorDataSchema,
@@ -34,7 +34,7 @@ function isFunctionTool(tool: LanguageModelV1FunctionTool | LanguageModelV1Provi
   return 'parameters' in tool;
 }
 
-type OpenRouterChatConfig = {
+type VolcEngineChatConfig = {
   provider: string;
   compatibility: "strict" | "compatible";
   headers: () => Record<string, string | undefined>;
@@ -43,19 +43,19 @@ type OpenRouterChatConfig = {
   extraBody?: Record<string, unknown>;
 };
 
-export class OpenRouterChatLanguageModel implements LanguageModelV1 {
+export class VolcEngineChatLanguageModel implements LanguageModelV1 {
   readonly specificationVersion = "v1";
   readonly defaultObjectGenerationMode = "tool";
 
-  readonly modelId: OpenRouterChatModelId;
-  readonly settings: OpenRouterChatSettings;
+  readonly modelId: VolcEngineChatModelId;
+  readonly settings: VolcEngineChatSettings;
 
-  private readonly config: OpenRouterChatConfig;
+  private readonly config: VolcEngineChatConfig;
 
   constructor(
-    modelId: OpenRouterChatModelId,
-    settings: OpenRouterChatSettings,
-    config: OpenRouterChatConfig
+    modelId: VolcEngineChatModelId,
+    settings: VolcEngineChatSettings,
+    config: VolcEngineChatConfig
   ) {
     this.modelId = modelId;
     this.settings = settings;

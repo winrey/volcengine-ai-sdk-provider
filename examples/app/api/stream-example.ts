@@ -1,10 +1,10 @@
 import { streamText } from "ai";
-import { createOpenRouter } from "@openrouter/ai-sdk-provider";
+import { createVolcEngine } from "volcengine-ai-sdk-provider";
 import { z } from "zod";
 
 export const getLasagnaRecipe = async (modelName: string) => {
-  const openrouter = createOpenRouter({
-    apiKey: process.env.OPENROUTER_API_KEY,
+  const openrouter = createVolcEngine({
+    apiKey: process.env.VOLCENGINE_API_KEY,
   });
 
   return streamText({
@@ -14,8 +14,8 @@ export const getLasagnaRecipe = async (modelName: string) => {
 };
 
 export const getWeather = async (modelName: string) => {
-  const openrouter = createOpenRouter({
-    apiKey: process.env.OPENROUTER_API_KEY,
+  const openrouter = createVolcEngine({
+    apiKey: process.env.VOLCENGINE_API_KEY,
   });
 
   const result = streamText({
