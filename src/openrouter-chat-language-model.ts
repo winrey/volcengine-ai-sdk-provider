@@ -186,7 +186,7 @@ export class OpenRouterChatLanguageModel implements LanguageModelV1 {
 
     return {
       text: choice.message.content ?? undefined,
-      reasoning: choice.message.reasoning ?? undefined,
+      reasoning: choice.message.reasoning_content ?? undefined,
       toolCalls: choice.message.tool_calls?.map((toolCall) => ({
         toolCallType: "function",
         toolCallId: toolCall.id ?? generateId(),
@@ -308,10 +308,10 @@ export class OpenRouterChatLanguageModel implements LanguageModelV1 {
               });
             }
 
-            if (delta.reasoning != null) {
+            if (delta.reasoning_content != null) {
               controller.enqueue({
                 type: "reasoning",
-                textDelta: delta.reasoning,
+                textDelta: delta.reasoning_content,
               });
             }
 
@@ -457,7 +457,7 @@ const openAIChatResponseSchema = z.object({
       message: z.object({
         role: z.literal("assistant"),
         content: z.string().nullable().optional(),
-        reasoning: z.string().nullable().optional(),
+        reasoning_content: z.string().nullable().optional(),
         tool_calls: z
           .array(
             z.object({
@@ -511,7 +511,7 @@ const openrouterChatChunkSchema = z.union([
           .object({
             role: z.enum(["assistant"]).optional(),
             content: z.string().nullish(),
-            reasoning: z.string().nullish(),
+            reasoning_content: z.string().nullish(),
             tool_calls: z
               .array(
                 z.object({
