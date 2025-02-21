@@ -1,5 +1,5 @@
 {
-  "name": "@weightwave/volcengine-ai-sdk-provider",
+  "name": "volcengine-ai-sdk-provider",
   "version": "0.1.0",
   "license": "Apache-2.0",
   "sideEffects": false,
